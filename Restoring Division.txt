@@ -1,42 +1,36 @@
 #include <stdio.h>
-#include <string.h>
-void restoring_division(int dividend[], int divisor[], int quotient[]) {
-    int partial_remainder[N+1];
-    int borrow = 0;
-
-memset(partial_remainder, 0, sizeof(partial_remainder));
-
-    for (int i = 0; i< N; i++) {
-        for (int j = N; j > 0; j--)
-partial_remainder[j] = partial_remainder[j - 1];
-
-partial_remainder[0] = dividend[i];
-        for (int j = 0; j < N+1; j++) {
-partial_remainder[j] -= divisor[j];
-            if (partial_remainder[j] < 0) {
-partial_remainder[j] += 2;
-partial_remainder[j+1] -= 1;
-            }
-        }
-        quotient[i] = (partial_remainder[0] >= 0) ? 1 : 0;
-        if (partial_remainder[0] < 0) {
-            for (int j = 0; j < N+1; j++) {
-partial_remainder[j] += divisor[j];
-            }
-        }
+void restore_division(int dividend, int divisor) {
+    int quotient = 0;
+    int remainder = dividend;
+    int bit = 1;
+    while (divisor <= remainder) {
+        divisor <<= 1;
+        bit <<= 1;
     }
+    while (bit > 0) {
+        if (remainder >= divisor) {
+            remainder -= divisor;
+            quotient |= bit;
+        }
+        divisor >>= 1;
+        bit >>= 1;
+    }
+
+    printf("Quotient: %d\n", quotient);
+    printf("Remainder: %d\n", remainder);
 }
-
 int main() {
-    int dividend[N] = {1, 1, 0, 1, 0, 1, 0, 1}; // Binary representation of dividend (example)
-    int divisor[N] = {1, 0, 1, 1, 0, 0, 1, 0};  // Binary representation of divisor (example)
-    int quotient[N]; // Quotient will be of the same size as the dividend
-restoring_division(dividend, divisor, quotient);
-printf("Quotient: ");
-    for (int i = 0; i< N; i++) {
-printf("%d", quotient[i]);
- }
-printf("\n");
+    int dividend, divisor;
+    printf("Enter dividend: ");
+    scanf("%d", &dividend);
+    printf("Enter divisor: ");
+    scanf("%d", &divisor);
 
+    if (divisor == 0) {
+        printf("Error: Division by zero.\n");
+        return 1;
+    }
+
+    restore_division(dividend, divisor);
     return 0;
 }
