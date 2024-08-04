@@ -1,0 +1,12 @@
+    MVI A, 0x05     ; Load number into accumulator
+    ANI 0x01        ; AND with 0x01
+    CPI 0x01        ; Compare with 0x01
+    JZ EVEN         ; Jump if zero (even)
+    ; Odd code
+    MVI C, 0x01     ; Flag for odd
+    JMP DONE
+EVEN:
+    ; Even code
+    MVI C, 0x00     ; Flag for even
+DONE:
+    NOP             ; End of program
